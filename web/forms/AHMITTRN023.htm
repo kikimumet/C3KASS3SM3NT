@@ -1,0 +1,184 @@
+<html>
+  <head>
+    <title>Halaman Monitoring</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: grey;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container my-4">
+      <!-- Box utama -->
+      <div class="bg-success rounded p-4" style="min-height: 90vh">
+        <!-- Form -->
+        <div class="bg-primary-subtle rounded p-4 mb-4">
+          <h4 class="mb-4">Aplikasi Data Kendaraan</h4>
+          <form id="filterForm">
+            <div class="row g-3">
+                
+                <!-- Left Column !-->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="from" class="form-label">Tanggal Transaksi From</label>
+                        <input type="date" id="from" class="form-control border-dark" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="noreg" class="form-label">Nomor Registrasi</label>
+                        <input type="text" id="noreg" class="form-control border-dark" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="nama" class="form-label">Nama Pemilik</label>
+                        <input type="text" id="nama" class="form-control border-dark" />
+                    </div>
+                </div>
+                
+                <!-- Right Column !-->
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="to" class="form-label">Tanggal Transaksi To</label>
+                        <input type="date" id="to" class="form-control border-dark" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="notelp" class="form-label">Nomor Telepon</label>
+                        <input type="text" id="notelp" class="form-control border-dark" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="merk" class="form-label">Merek Kendaraan</label>
+                        <input type="text" id="merk" class="form-control border-dark" />
+                    </div>
+                </div>
+            <div class="mt-3 d-flex gap-2">
+              <button type="submit" class="btn btn-primary w-25">Search</button>
+              <button type="button" class="btn btn-danger w-25" id="resetForm">Reset</button>
+            </div>
+         </div>
+        </form>
+        <div class="bg-body rounded p-3">
+          <div class="d-flex justify-content-end mb-3 gap-2">
+            <button class="btn btn-primary btn-sm" id="btnExport">Export</button>
+            <button class="btn btn-primary btn-sm" id="btnAdd" onclick="ittrn023ToAddView()">Add</button>
+          </div>
+
+          <table class="table table-bordered table-striped text-center align-middle">
+            <thead class="table-secondary">
+              <tr>
+                <th>No</th>
+                <th>Nomor Registrasi</th>
+                <th>Nama Pemilik</th>
+                <th>Nomor Telepon</th>
+                <th>Merk Kendaraan</th>
+                <th>Tanggal Transaksi</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="dataTable">
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+      <script>
+        $(document).ready(function () {
+            function showVehicles(params) {
+                params.search = {
+                    tanggalFrom: $('#tanggalTransaksiFrom').val() || "",
+                    tanggalTo: $('#tanggalTransaksiTo').val() || "",
+                    nomorRegistrasi: $('#nomorRegistrasi').val() || "",
+                    namaPemilik: $('#namaPemilik').val() || "",
+                    nomorTelepon: $('#nomorTelepon').val() || "",
+                    merkKendaraan: $('#merkKendaraan').val() || ""
+                };
+
+                if (params.sort === undefined) {
+                    limitUnitLoad = params.limit;
+                    offsetUnitLoad = params.offset;
+                    return {
+                        limit: params.limit,
+                        offset: params.offset,
+                        search: params.search
+                    };
+                }
+                return params;
+            }
+
+            $('#btnSearch').on("click", function (e) {
+                e.preventDefault();
+
+                const fromDate = $('#tanggalTransaksiFrom').val();
+                const toDate = $("#tanggalTransaksiTo").val();
+                const today = new Date().toISOString().split("T")[0];
+
+                if (fromDate && fromDate > today) {
+                    alert("Tanggal Transaksi From tidak boleh lebih dari hari ini.");
+                    return;
+                } 
+
+                if (toDate && toDate > today) {
+                    alert("Tanggal Transaksi To tidak boleh lebih dari hari ini.");
+                    return;
+                } 
+
+                if (fromDate && toDate && toDate < fromDate ) {
+                    alert("Tanggal To tidak boleh lebih kecil dari Tanggal From");
+                    return;
+                }
+
+                let params = {
+                    limit: 10,
+                    offset: 0
+                };
+
+                params = showVehicles(params);
+
+                _fw_post("/jx08/ahmittrn000-pst/rest/it/trn001/show-data-kendaraan", params, function (response){
+                    console.log("Data Berhasil", response);
+                    $('#tabelKendaraan tbody').empty();
+
+                    let counter = 1;
+                    response.data.forEach(item => {
+                        $('#tabelKendaraan tbody').append(`
+                            <tr data-vkey="${item.key}">
+                                <td>${counter++}</td>
+                                <td>${item.nomorRegistrasi}</td>
+                                <td>${item.namaPemilik}</td>
+                                <td>${item.nomorTelepon}</td>
+                                <td>${item.merkKendaraan}</td>
+                                <td>${item.tanggalTransaksi}</td>
+                                <td>
+                                    <button class="btn btn-warning btn-sm"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-info btn-sm"><i class="bi bi-eye"></i></button>
+                                    <button class="btn btn-danger btn-sm btn-delete"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+            });
+        });
+        
+        function openDetailPage(button) {
+            let row = $(button).closest('tr');
+            let vkey = row.data('vkey'); // 
+
+            sessionStorage.setItem('selectedVkey', vkey);
+
+            window.location.href = "/AHMITTRN023_VIEW.htm";
+        }
+
+
+        function ittrn023ToAddView() {
+            window.location.href = "AHMITTRN023_ADD.htm";
+        }
+        </script>
+    
+    
+  </body>
+</html>

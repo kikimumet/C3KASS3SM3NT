@@ -1,0 +1,211 @@
+<div id="AHMITTRN001" class="div-app" data-version="1.0">
+    <div class="global_message">
+
+    </div>
+
+    <div id="ahmittrn001p01" class="subpage subpage-default" data-path="Maintain Master Setting">
+        <div class="row form-filter-panel">
+            <div class="col-md-6">
+                <div class="form-group large-font">
+                    <label>Search Master Setting</label>
+                    <div class="input-group">
+                        <input id="ahmittrn001p01Search" type="text" class="form-control" placeholder="Search...">
+                        <span class="glyphiconglyphicon-remove-circle btn-clear"></span>
+                        <span class="input-group-btn">
+                            <button class="btnbtn-primary large-button bg-grey" type="button" 
+                                    onclick="$('#ahmittrn001p01SearchTable').bootstrapTable('refresh');">
+                                <i class="glyphiconglyphicon-search fg-white"></i> Search
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group-button">
+            <button class="btn large-button bg-red" onclick="ahmittrn001p01PrepareAdd(this);return false;">
+                <i class="glyphiconglyphicon-plus fg-white"></i> Add New Menu</button>
+        </div>
+
+        <div id="table-container">
+            <table id="ahmittrn001p01SearchTable"
+                   data-method="post"
+                   data-url="/jx01/ahmsvjxtmp000-pst/rest/jx/tmp205/get-master-setting"
+                   data-content-type="application/json"
+                   data-data-type="json"
+                   data-query-params-type="limit"
+                   data-query-params="ahmittrn001p01Presearch"
+                   data-response-handler="loadData"
+                   data-side-pagination="server"
+                   data-pagination="true"
+                   data-unique-id="id">
+                <thead>
+                    <tr>
+
+                        <th data-field="id" 
+                            data-sortable="true"
+                            data-visible="true">
+                            Master Setting ID
+                        </th>
+                        <th data-field="desc" 
+                            data-sortable="true"
+                            data-visible="true">
+                            Master Setting Desc
+                        </th>
+                        <th data-field="roleid" 
+                            data-sortable="true"
+                            data-visible="true">
+                            Master Setting Role
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <!--ADD FILES-->
+    <div id="ahmittrn002p02" class="subpage" data-path="Maintain Master Setting/Add Master Setting">
+        <div class="row" id="AHMITTRN001FilterPanel02">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-6" style="padding-left: 0px !important;">
+                        <div class="form-group large-font">
+                            <label for="ahmittrn002p02_id" class="col-sm-3 control-label">
+                                ID <span style="color:red">* </span>
+                            </label>
+                            <div class="col-sm-8">
+                                <input id="ahmittrn002p02_id" type="text" maxlength="15"
+                                       class="input_text_table form-control" >
+                            </div>
+                            <!--                                <div class="input-group lookup" data-title="LOV Setting ID"
+                                                                 data-input-class="uppercase" data-search-param="ahmittrn002p02_SearchParamDocNo"
+                                                                 data-url="/jx01/ahmsvjxtmp000-pst/rest/jx/tmp205/get-master-setting" 
+                                                                 data-lookup-pre-func="ahmittrn001p01LookupSettingID" 
+                                                                 data-lookup-next-focus="ahmittrn002p02_desc"
+                                                                 data-columns='[{"id":"id","name":"SettingID","visible":"true","sortable":"true"}
+                                                                 ,{"id":"desc","name":"SettingDesc","visible":"true","sortable":"true"}]'
+                                                                 data-callback='{"ahmittrn002p02_id":"id"}'>
+                            <input id="ahmittrn002p02_id" class="form-control input-lookup inputan uppercase" 
+                                                                       data-field="id" placeholder="type here or click button" maxlength="20" >
+                            <span class="input-group-btn">
+                            <button class="btnbtn-default large-button btn-lookup inputan" type="button">LOV</button>
+                            </span>
+                            </div>-->
+                        </div>
+
+                        <div class="form-group large-font">
+                            <label for="ahmittrn002p02_desc" class="col-sm-3 control-label">Description</label>
+                            <div class="col-sm-8">
+                                <input id="ahmittrn002p02_desc" type="text" maxlength="150"
+                                       class="input_text_table form-control" >
+                            </div>
+                        </div>
+
+                        <div class="form-group large-font">
+                            <label for="ahmittrn002p02_role" class="col-sm-3 control-label">Role</label>
+                            <div class="col-sm-8">
+                                <input id="ahmittrn002p02_role" type="text" maxlength="10"
+                                       class="input_text_table form-control" >
+                            </div>
+                        </div>
+
+                        <div class="form-group large-font form-entry-button">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-6">
+                                <button id="ahmittrn002p02BtnSave" class="btn large-button bg-green" 
+                                        onclick="ahmittrn002p02Add(this);return false;">
+                                    <i class="glyphiconglyphicon-floppy-disk fg-white"></i> Save
+                                </button>
+                                <button id="ahmittrn002p02BtnBack" class="btn large-button bg-red"
+                                        onclick="ahmittrn002p02Cancel(this);return false;">
+                                    <i class="glyphiconglyphicon-repeat fg-white"></i> Cancel 
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ahmittrn002p02_id').focus();
+    });
+
+    function ahmittrn001p01Presearch(params) {
+        params.search = {"any": $('#ahmittrn001p01Search').val()};
+        if (params.sort == undefined) {
+            return{
+                limit: params.limit,
+                offset: params.offset,
+                search: params.search
+            }
+        }
+        return params;
+    }
+
+    function ahmittrn001p01LookupSettingID(params) {
+        params.search = {
+            "any": $('#ahmittrn002p02_id').val()
+            , "status": "Enabled"
+            , "parent": "parent"
+        };
+        if (params.sort === undefined) {
+            return{
+                limit: params.limit,
+                offset: params.offset,
+                search: params.search
+            };
+        }
+        return params;
+    }
+
+    function ahmittrn001p01PrepareAdd(obj) {
+        $('#ahmittrn002p02_id').prop('disabled', false);
+        $('#ahmittrn002p02_desc').prop('disabled', false);
+        $('#ahmittrn002p02_role').prop('disabled', false);
+        _fw_validation_clear($('#ahmittrn002p02'));
+        _fw_reset_subpage($('#ahmittrn002p02'));
+        _fw_subpage(obj, 'ahmittrn002p02');
+    }
+
+    function ahmittrn002p02Add(obj) {
+        var id = $('#ahmittrn002p02_id').val();
+        vardesc = $('#ahmittrn002p02_desc').val();
+        var role = $('#ahmittrn002p02_role').val();
+
+        _fw_validation_clear(obj);
+        _fw_validation_add(obj, 'ahmittrn002p02_id', 'required');
+
+        if (_fw_validation_validate(obj)) {
+            var vo = new Object();
+            vo.id = $('#ahmittrn002p02_id').val();
+            vo.desc = $('#ahmittrn002p02_desc').val();
+            vo.roleid = $('#ahmittrn002p02_role').val();
+
+            console.log(vo);
+
+            _fw_post('/jx01/ahmsvjxtmp000-pst/rest/jx/tmp205/save-master-setting', vo, function (data) {
+                if (data.status === "1") {
+                    $('#ahmittrn002p02_id').prop('disabled', true);
+                    $('#ahmittrn002p02_desc').prop('disabled', true);
+                    $('#ahmittrn002p02_role').prop('disabled', true);
+                    _fw_subpage(obj, 'ahmittrn001p01');
+                    _fw_setMessage(obj, 1, 'Save Data Success');
+                } else {
+                    _fw_setMessage(obj, 0, data.message.error);
+                }
+            });
+        }
+    }
+
+    function ahmittrn002p02Cancel(obj) {
+        _fw_reset_subpage('#ahmittrn002p02');
+        _fw_subpage(obj, 'ahmittrn001p01');
+        $('#ahmittrn001p01Search').focus();
+    }
+</script>
