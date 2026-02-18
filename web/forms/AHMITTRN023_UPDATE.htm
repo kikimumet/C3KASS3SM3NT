@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Update Data Kendaraan</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <style>
+            input[readonly] {
+                background-color: #f0f0f0;
+            }
+            
+            .readonly-fields {
+                pointer-events: none;
+                user-select: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container my-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="mb-4">Aplikasi Data Kendaran / Add</h4>
+                    
+                    <form id="formUpdateKendaraan">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Nomor Registrasi</label>
+                                    <input type="text" id="noreg" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Nama Pemiliki <span class="text-danger">*</span></label>
+                                    <input type="text" id="noreg" class="form-control border-dark"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Nomor Telepon <span class="text-danger">*</span></label>
+                                    <input type="text" id="noreg" class="form-control border-dark"/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Nomor Frame</label>
+                                    <input type="text" id="noreg" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                  <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Nomor Engine</label>
+                                    <input type="text" id="noreg" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                  <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Alamat <span class="text-danger">*</span></label>
+                                    <textarea id="alamat" class="form-control border-dark" rows="5"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                 <div class="mb-3">
+                                    <label for="tipeMotor" class="form-label fw-bold">Tipe Motor <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                      <input type="text" id="tipeMotor" class="form-control border-dark" placeholder="Type here or click button" required>
+                                      <button class="btn btn-outline-secondary" type="button">
+                                        <i class="bi bi-search"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                <div class="mb-3">
+                                    <label for="noreg" class="form-label fw-bold">Warna Motor <span class="text-danger">*</span></label>
+                                    <select class="form-select border-dark">
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="merek" class="form-label fw-bold">Merek</label>
+                                    <input type="text" id="merek" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="tahunPembuatan" class="form-label fw-bold">Tahun Pembuatan</label>
+                                    <input type="text" id="tahunPembuatan" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kategori" class="form-label fw-bold">Kategori</label>
+                                    <input type="text" id="kategori" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="kapasitasMesin" class="form-label fw-bold">Kapasitas CC</label>
+                                    <input type="text" id="kapasitasMesin" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="bahanBakar" class="form-label fw-bold">Bahan Bakar</label>
+                                    <input type="text" id="bahanBakar" class="form-control readonly-fields border-dark" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-secondary" onclick="ittrn023Cancel()">Cancel</button>
+                            <button type="submit" class="btn btn-primary" onclick="ittrn023Update(this)">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            function ittrn023Update(obj) {
+                var vo = new Object();
+                vo = {
+                    "nama_pemilik": $('#nama').val(),
+                    "nomortelefon_pemilik": $('#nomortelepon').val(),
+                    "address": $('#alamat').val(),
+                    "tipe_motor": $('#tipeMotor').val(),
+                    "kode_warna": $('#selectwarna').val()
+                }
+                
+                _fw_post('/jx08/ahmittrn000-pst/rest/it/trn001/update-data-kendaraan', vo, function(data) {
+                    if (data.status === "1") {
+                        _fw_subpage(obj, 'ahmittrn001');
+                        _fw_setMessage(obj, 1, data.message);
+                    } else {
+                        _fw_setMessage(obj, 0, data.message.error);
+                    }
+                });
+            }
+            
+            
+            function ittrn023Cancel() {
+                window.location.href="AHMITTRN023.htm";
+            }
+        </script>
+    </body>
+</html>
